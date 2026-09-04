@@ -1,0 +1,1375 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VocaTest - Test Vocacional</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #eef3f8;
+            min-height: 100vh;
+            padding: 30px 15px;
+            color: #222;
+
+            background-image:
+                radial-gradient(
+                    circle at 10% 20%,
+                    rgba(93, 135, 190, 0.12) 0,
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 90% 80%,
+                    rgba(110, 160, 210, 0.12) 0,
+                    transparent 25%
+                );
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* =========================
+           ENCABEZADO
+        ========================= */
+
+        header {
+            text-align: center;
+            color: #26384d;
+            margin-bottom: 25px;
+        }
+
+        header .icono {
+            font-size: 50px;
+            background: white;
+            width: 85px;
+            height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        header h1 {
+            font-size: 40px;
+            margin: 8px 0;
+            color: #304f70;
+        }
+
+        header p {
+            font-size: 17px;
+            color: #607080;
+        }
+
+        /* =========================
+           TARJETAS
+        ========================= */
+
+        .tarjeta {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid #dce3ea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* =========================
+           INICIO
+        ========================= */
+
+        #inicio {
+            text-align: center;
+        }
+
+        #inicio h2 {
+            color: #304f70;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        #inicio p {
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .nombre-box {
+            margin: 25px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .nombre-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #35485c;
+        }
+
+        .nombre-box input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #d8e0e8;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .nombre-box input:focus {
+            border-color: #5d87b8;
+        }
+
+        /* =========================
+           BOTONES
+        ========================= */
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 13px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-principal {
+            background: #3f6f9f;
+            color: white;
+        }
+
+        .btn-principal:hover {
+            background: #345e87;
+            transform: translateY(-1px);
+        }
+
+        .btn-secundario {
+            background: #e9edf1;
+            color: #444;
+        }
+
+        .btn-secundario:hover {
+            background: #dce2e7;
+        }
+
+        /* =========================
+           TEST
+        ========================= */
+
+        #test {
+            display: none;
+        }
+
+        .barra-superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #65727e;
+            font-weight: bold;
+        }
+
+        .barra {
+            width: 100%;
+            height: 9px;
+            background: #e8edf1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progreso {
+            height: 100%;
+            width: 0%;
+            background: #3f6f9f;
+            transition: width 0.3s;
+        }
+
+        .pregunta {
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            color: #293b4d;
+        }
+
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opcion {
+            background: #f7f9fb;
+            border: 2px solid #e0e6eb;
+            padding: 16px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        .opcion:hover {
+            border-color: #7d9fbe;
+            background: #f1f5f8;
+        }
+
+        .opcion.seleccionada {
+            border-color: #3f6f9f;
+            background: #e8f0f7;
+            color: #315b82;
+            font-weight: bold;
+        }
+
+        .navegacion {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        /* =========================
+           RESULTADOS
+        ========================= */
+
+        #resultados {
+            display: none;
+        }
+
+        .resultado-titulo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .resultado-titulo .emoji {
+            font-size: 55px;
+        }
+
+        .resultado-titulo h2 {
+            color: #304f70;
+            font-size: 30px;
+            margin: 10px 0;
+        }
+
+        .resultado-titulo p {
+            color: #666;
+        }
+
+        .area-principal {
+            background: #3f6f9f;
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .area-principal h3 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .porcentaje-grande {
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           BARRAS DE RESULTADOS
+        ========================= */
+
+        .resultado-area {
+            margin-bottom: 18px;
+        }
+
+        .area-nombre {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .barra-resultado {
+            height: 13px;
+            background: #e8edf1;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .barra-resultado div {
+            height: 100%;
+            border-radius: 20px;
+            background: #5d87b8;
+        }
+
+        /* =========================
+           CARRERAS
+        ========================= */
+
+        .carreras {
+            margin-top: 25px;
+        }
+
+        .carreras h3 {
+            color: #304f70;
+            margin-bottom: 15px;
+        }
+
+        .lista-carreras {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(200px, 1fr)
+            );
+            gap: 12px;
+        }
+
+        .carrera {
+            background: #f5f7f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #5d87b8;
+        }
+
+        .consejo {
+            margin-top: 25px;
+            background: #f4f7fa;
+            border-left: 5px solid #7d9fbe;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .botones-finales {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* =========================
+           PIE DE PÁGINA
+        ========================= */
+
+        footer {
+            text-align: center;
+            color: #687887;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           CELULARES
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            .tarjeta {
+                padding: 20px;
+            }
+
+            .pregunta {
+                font-size: 20px;
+            }
+
+            .navegacion {
+                gap: 10px;
+            }
+
+            .navegacion button {
+                padding: 12px 18px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="contenedor">
+
+    <!-- =========================
+         ENCABEZADO
+    ========================= -->
+
+    <header>
+
+        <div class="icono">🧭</div>
+
+        <h1>VocaTest</h1>
+
+        <p>
+            Descubre las áreas profesionales que más se relacionan contigo
+        </p>
+
+    </header>
+
+
+    <!-- =========================
+         PANTALLA DE INICIO
+    ========================= -->
+
+    <section id="inicio" class="tarjeta">
+
+        <h2>¡Bienvenido a VocaTest!</h2>
+
+        <p>
+            Este test vocacional está diseñado para ayudarte a conocer
+            tus principales intereses, habilidades y preferencias.
+        </p>
+
+        <p>
+            Responde las 20 preguntas pensando en lo que realmente
+            harías o preferirías. No existen respuestas correctas o incorrectas.
+        </p>
+
+        <div class="nombre-box">
+
+            <label for="nombre">
+                Ingresa tu nombre:
+            </label>
+
+            <input
+                type="text"
+                id="nombre"
+                placeholder="Escribe tu nombre"
+            >
+
+        </div>
+
+        <button
+            class="btn-principal"
+            onclick="comenzarTest()"
+        >
+            Comenzar test
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         TEST
+    ========================= -->
+
+    <section id="test" class="tarjeta">
+
+        <div class="barra-superior">
+
+            <span id="numeroPregunta">
+                Pregunta 1 de 20
+            </span>
+
+            <span id="porcentaje">
+                5%
+            </span>
+
+        </div>
+
+
+        <div class="barra">
+
+            <div
+                class="progreso"
+                id="progreso"
+            ></div>
+
+        </div>
+
+
+        <div id="contenidoPregunta"></div>
+
+
+        <div class="navegacion">
+
+            <button
+                class="btn-secundario"
+                id="btnAnterior"
+                onclick="anteriorPregunta()"
+            >
+                ← Anterior
+            </button>
+
+            <button
+                class="btn-principal"
+                id="btnSiguiente"
+                onclick="siguientePregunta()"
+            >
+                Siguiente →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RESULTADOS
+    ========================= -->
+
+    <section id="resultados" class="tarjeta">
+
+        <div class="resultado-titulo">
+
+            <div class="emoji">
+                🎯
+            </div>
+
+            <h2 id="tituloResultado">
+                ¡Estos son tus resultados!
+            </h2>
+
+            <p id="mensajeResultado"></p>
+
+        </div>
+
+
+        <div class="area-principal">
+
+            <h3 id="areaPrincipal">
+                Tecnología
+            </h3>
+
+            <p>
+                Tu área con mayor afinidad
+            </p>
+
+            <div
+                class="porcentaje-grande"
+                id="porcentajePrincipal"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <h3 style="margin-bottom: 18px;">
+            📊 Tu perfil vocacional
+        </h3>
+
+        <div id="barrasResultados"></div>
+
+
+        <div class="carreras">
+
+            <h3>
+                🎓 Carreras relacionadas
+            </h3>
+
+            <div
+                class="lista-carreras"
+                id="listaCarreras"
+            ></div>
+
+        </div>
+
+
+        <div class="consejo">
+
+            <strong>💡 Recuerda:</strong>
+
+            <span id="consejoTexto">
+                Este resultado es una orientación inicial.
+            </span>
+
+        </div>
+
+
+        <div class="botones-finales">
+
+            <button
+                class="btn-principal"
+                onclick="reiniciarTest()"
+            >
+                Volver a realizar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <p>
+            Proyecto de Computación • Día del Logro
+        </p>
+
+        <p>
+            VocaTest © 2026
+        </p>
+
+    </footer>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PREGUNTAS
+========================================================= */
+
+const preguntas = [
+
+    {
+        pregunta: "Cuando tienes que resolver un problema difícil, ¿qué haces normalmente?",
+        opciones: [
+            ["Busco diferentes soluciones y pruebo cuál funciona mejor", "tecnologia"],
+            ["Pienso en una forma original o diferente de solucionarlo", "arte"],
+            ["Pienso en cómo puede afectar a las personas involucradas", "salud"],
+            ["Investigo las causas antes de intentar solucionarlo", "ciencias"],
+            ["Organizo los pasos y busco la forma más eficiente de hacerlo", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Si te dan un proyecto sin instrucciones detalladas, ¿cómo reaccionas?",
+        opciones: [
+            ["Investigo y experimento hasta descubrir cómo hacerlo", "tecnologia"],
+            ["Me gusta tener libertad para hacerlo de una manera creativa", "arte"],
+            ["Pregunto qué necesidades tienen las personas que recibirán el proyecto", "salud"],
+            ["Busco información para entender bien el tema", "ciencias"],
+            ["Organizo el trabajo y reparto las tareas necesarias", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Cuál de estas actividades se te hace más fácil?",
+        opciones: [
+            ["Encontrar errores y descubrir cómo corregirlos", "tecnologia"],
+            ["Crear diseños, dibujos o presentaciones atractivas", "arte"],
+            ["Escuchar a alguien y comprender lo que necesita", "salud"],
+            ["Analizar información y encontrar patrones", "ciencias"],
+            ["Planificar actividades y coordinar personas", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Cuando aprendes algo nuevo, ¿qué método prefieres?",
+        opciones: [
+            ["Practicarlo directamente y aprender mediante prueba y error", "tecnologia"],
+            ["Utilizar imágenes, ejemplos o formas creativas", "arte"],
+            ["Relacionarlo con situaciones de la vida cotidiana", "salud"],
+            ["Leer, investigar y comprender cómo funciona", "ciencias"],
+            ["Aprender cómo aplicarlo para conseguir un objetivo", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "En un trabajo grupal, ¿qué papel sueles asumir?",
+        opciones: [
+            ["Me encargo de la parte técnica o de resolver problemas", "tecnologia"],
+            ["Me encargo de la presentación y de que el trabajo sea creativo", "arte"],
+            ["Me preocupo por que todos puedan participar y sentirse escuchados", "salud"],
+            ["Busco información y compruebo que los datos sean correctos", "ciencias"],
+            ["Organizo las tareas y verifico que se cumplan", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué tipo de reto te parece más interesante?",
+        opciones: [
+            ["Crear algo que antes no existía", "tecnologia"],
+            ["Convertir una idea en algo visual y llamativo", "arte"],
+            ["Encontrar una forma de ayudar a alguien", "salud"],
+            ["Descubrir por qué ocurre un fenómeno", "ciencias"],
+            ["Conseguir que un proyecto funcione y alcance sus objetivos", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Si tuvieras una tarde libre para aprender algo por tu cuenta, ¿qué elegirías?",
+        opciones: [
+            ["Programación, computadoras o tecnología", "tecnologia"],
+            ["Dibujo, fotografía, edición o diseño", "arte"],
+            ["Primeros auxilios, deporte o bienestar", "salud"],
+            ["Astronomía, naturaleza, experimentos o ciencia", "ciencias"],
+            ["Emprendimiento, economía o liderazgo", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué tipo de problemas suelen pedirte ayuda para resolver?",
+        opciones: [
+            ["Problemas relacionados con computadoras o tecnología", "tecnologia"],
+            ["Problemas relacionados con presentaciones, diseños o creatividad", "arte"],
+            ["Problemas personales o situaciones en las que necesitan ser escuchados", "salud"],
+            ["Problemas que necesitan investigación o análisis", "ciencias"],
+            ["Problemas de organización o planificación", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué te resulta más satisfactorio después de terminar un proyecto?",
+        opciones: [
+            ["Ver que algo funciona gracias a lo que construí", "tecnologia"],
+            ["Ver que mi resultado quedó como lo había imaginado", "arte"],
+            ["Saber que mi trabajo fue útil para alguien", "salud"],
+            ["Haber descubierto o aprendido algo nuevo", "ciencias"],
+            ["Haber conseguido los objetivos que me propuse", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Cuando ves algo que no funciona correctamente, ¿qué haces primero?",
+        opciones: [
+            ["Intento encontrar dónde está el error", "tecnologia"],
+            ["Pienso si podría hacerse de una manera diferente", "arte"],
+            ["Me preocupo por quién podría verse afectado", "salud"],
+            ["Investigo qué pudo causar el problema", "ciencias"],
+            ["Pienso cómo evitar que vuelva a suceder", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué capacidad consideras que tienes más desarrollada?",
+        opciones: [
+            ["Pensamiento lógico y resolución de problemas", "tecnologia"],
+            ["Creatividad e imaginación", "arte"],
+            ["Empatía y comunicación con otras personas", "salud"],
+            ["Análisis y observación", "ciencias"],
+            ["Organización y liderazgo", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué tipo de actividad podría mantener tu atención durante varias horas?",
+        opciones: [
+            ["Resolver un problema complicado o aprender a programar", "tecnologia"],
+            ["Crear, dibujar, editar o diseñar algo", "arte"],
+            ["Conversar, enseñar o ayudar a otras personas", "salud"],
+            ["Investigar un tema que me genera curiosidad", "ciencias"],
+            ["Planificar un proyecto o pensar cómo mejorarlo", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Si tuvieras que investigar un tema para una exposición, ¿qué harías?",
+        opciones: [
+            ["Buscaría herramientas digitales para hacer el trabajo", "tecnologia"],
+            ["Pensaría cómo presentar la información de forma atractiva", "arte"],
+            ["Buscaría información sobre cómo afecta a las personas", "salud"],
+            ["Compararía diferentes fuentes y analizaría los datos", "ciencias"],
+            ["Organizaría la información para explicar sus beneficios y resultados", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué situación te resulta más interesante?",
+        opciones: [
+            ["Entender cómo funciona una aplicación o dispositivo", "tecnologia"],
+            ["Analizar por qué una película, imagen o canción transmite una emoción", "arte"],
+            ["Comprender cómo ayudar a alguien que tiene una dificultad", "salud"],
+            ["Entender cómo funciona algo en la naturaleza", "ciencias"],
+            ["Comprender por qué un negocio tiene éxito o fracasa", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Cuando cometes un error, ¿cuál suele ser tu reacción?",
+        opciones: [
+            ["Busco exactamente qué hice mal para corregirlo", "tecnologia"],
+            ["Intento otra estrategia hasta encontrar una que me guste", "arte"],
+            ["Pienso en cómo mi error pudo afectar a los demás", "salud"],
+            ["Analizo qué causó el error para evitar repetirlo", "ciencias"],
+            ["Pienso qué puedo cambiar para mejorar el resultado", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué clase de entorno de trabajo te imaginas disfrutando más?",
+        opciones: [
+            ["Un lugar donde pueda trabajar con computadoras y tecnología", "tecnologia"],
+            ["Un espacio donde pueda crear y desarrollar ideas", "arte"],
+            ["Un lugar donde tenga contacto y pueda ayudar a otras personas", "salud"],
+            ["Un laboratorio, centro de investigación o espacio de análisis", "ciencias"],
+            ["Un lugar donde pueda organizar proyectos y tomar decisiones", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Si pudieras crear algo para solucionar un problema de tu colegio, ¿qué preferirías hacer?",
+        opciones: [
+            ["Una aplicación o sistema que facilite alguna tarea", "tecnologia"],
+            ["Una campaña visual que ayude a comunicar el problema", "arte"],
+            ["Un proyecto para mejorar el bienestar de los estudiantes", "salud"],
+            ["Una investigación para conocer las causas del problema", "ciencias"],
+            ["Un sistema para organizar mejor las actividades del colegio", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "¿Qué tipo de reconocimiento te haría sentir más orgulloso?",
+        opciones: [
+            ["Que reconocieran mi capacidad para resolver problemas", "tecnologia"],
+            ["Que destacaran mi creatividad", "arte"],
+            ["Que dijeran que fui de ayuda para alguien", "salud"],
+            ["Que reconocieran la calidad de mi investigación", "ciencias"],
+            ["Que destacaran mi capacidad para dirigir un proyecto", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Imagina que tienes que elegir un proyecto para todo el año. ¿Cuál preferirías?",
+        opciones: [
+            ["Desarrollar una página web, aplicación o programa", "tecnologia"],
+            ["Crear una producción audiovisual, exposición o diseño", "arte"],
+            ["Desarrollar un proyecto relacionado con el bienestar de la comunidad", "salud"],
+            ["Realizar una investigación y presentar sus resultados", "ciencias"],
+            ["Crear y administrar un pequeño emprendimiento", "negocios"]
+        ]
+    },
+
+    {
+        pregunta: "Pensando en tu futuro, ¿qué te gustaría que caracterizara principalmente tu trabajo?",
+        opciones: [
+            ["Resolver problemas y crear soluciones", "tecnologia"],
+            ["Crear cosas originales y expresar mis ideas", "arte"],
+            ["Ayudar y generar un impacto positivo en las personas", "salud"],
+            ["Aprender constantemente y descubrir cosas nuevas", "ciencias"],
+            ["Liderar proyectos y conseguir objetivos", "negocios"]
+        ]
+    }
+
+];
+
+
+/* =========================================================
+   INFORMACIÓN DE LAS ÁREAS
+========================================================= */
+
+const areas = {
+
+    tecnologia: {
+        nombre: "Tecnología 💻",
+
+        carreras: [
+            "Ingeniería de Sistemas",
+            "Ingeniería de Software",
+            "Ciencias de la Computación",
+            "Desarrollo de Software",
+            "Ingeniería Informática"
+        ],
+
+        consejo:
+            "Podrías explorar programación, desarrollo web, robótica o tecnología. También es recomendable realizar pequeños proyectos para descubrir qué área tecnológica disfrutas más."
+    },
+
+    arte: {
+        nombre: "Arte y Creatividad 🎨",
+
+        carreras: [
+            "Diseño Gráfico",
+            "Diseño de Videojuegos",
+            "Arquitectura",
+            "Comunicación Audiovisual",
+            "Animación Digital"
+        ],
+
+        consejo:
+            "Puedes desarrollar tus habilidades mediante dibujo, diseño, fotografía, edición de video, animación u otras actividades creativas."
+    },
+
+    salud: {
+        nombre: "Salud y Servicio ❤️",
+
+        carreras: [
+            "Medicina",
+            "Enfermería",
+            "Psicología",
+            "Nutrición",
+            "Fisioterapia"
+        ],
+
+        consejo:
+            "Si te interesa ayudar a las personas, puedes investigar diferentes profesiones relacionadas con la salud y el bienestar y conocer las habilidades necesarias para cada una."
+    },
+
+    ciencias: {
+        nombre: "Ciencias e Investigación 🔬",
+
+        carreras: [
+            "Biología",
+            "Química",
+            "Física",
+            "Astronomía",
+            "Ingeniería Ambiental"
+        ],
+
+        consejo:
+            "Puedes fortalecer tu perfil mediante experimentos, investigaciones, ferias científicas y actividades relacionadas con las matemáticas y las ciencias."
+    },
+
+    negocios: {
+        nombre: "Negocios y Liderazgo 📈",
+
+        carreras: [
+            "Administración",
+            "Economía",
+            "Marketing",
+            "Contabilidad",
+            "Negocios Internacionales"
+        ],
+
+        consejo:
+            "Puedes probar actividades de emprendimiento, liderazgo, organización de proyectos y administración para conocer mejor este campo."
+    }
+
+};
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let preguntaActual = 0;
+
+let respuestas = [];
+
+let nombreUsuario = "";
+
+
+/* =========================================================
+   COMENZAR TEST
+========================================================= */
+
+function comenzarTest() {
+
+    const nombre =
+        document.getElementById("nombre").value.trim();
+
+    if (nombre === "") {
+
+        alert(
+            "Por favor, ingresa tu nombre antes de comenzar."
+        );
+
+        return;
+    }
+
+    nombreUsuario = nombre;
+
+    document.getElementById("inicio").style.display =
+        "none";
+
+    document.getElementById("test").style.display =
+        "block";
+
+    mostrarPregunta();
+}
+
+
+/* =========================================================
+   MOSTRAR PREGUNTA
+========================================================= */
+
+function mostrarPregunta() {
+
+    const pregunta =
+        preguntas[preguntaActual];
+
+    const contenido =
+        document.getElementById("contenidoPregunta");
+
+
+    let html = `
+
+        <div class="pregunta">
+            ${preguntaActual + 1}. ${pregunta.pregunta}
+        </div>
+
+        <div class="opciones">
+
+    `;
+
+
+    pregunta.opciones.forEach(
+        (opcion, indice) => {
+
+            const seleccionada =
+                respuestas[preguntaActual] === opcion[1]
+                ? "seleccionada"
+                : "";
+
+
+            html += `
+
+                <div
+                    class="opcion ${seleccionada}"
+                    onclick="seleccionarOpcion(${indice})"
+                >
+                    ${opcion[0]}
+                </div>
+
+            `;
+        }
+    );
+
+
+    html += `
+        </div>
+    `;
+
+
+    contenido.innerHTML = html;
+
+
+    document.getElementById(
+        "numeroPregunta"
+    ).textContent =
+        `Pregunta ${preguntaActual + 1} de ${preguntas.length}`;
+
+
+    const porcentaje =
+        Math.round(
+            ((preguntaActual + 1) /
+            preguntas.length) * 100
+        );
+
+
+    document.getElementById(
+        "porcentaje"
+    ).textContent =
+        porcentaje + "%";
+
+
+    document.getElementById(
+        "progreso"
+    ).style.width =
+        porcentaje + "%";
+
+
+    document.getElementById(
+        "btnAnterior"
+    ).style.visibility =
+        preguntaActual === 0
+        ? "hidden"
+        : "visible";
+
+
+    if (
+        preguntaActual ===
+        preguntas.length - 1
+    ) {
+
+        document.getElementById(
+            "btnSiguiente"
+        ).textContent =
+            "Ver resultados 🎯";
+
+    } else {
+
+        document.getElementById(
+            "btnSiguiente"
+        ).textContent =
+            "Siguiente →";
+
+    }
+
+}
+
+
+/* =========================================================
+   SELECCIONAR OPCIÓN
+========================================================= */
+
+function seleccionarOpcion(indice) {
+
+    const opcion =
+        preguntas[preguntaActual].opciones[indice];
+
+    respuestas[preguntaActual] =
+        opcion[1];
+
+    mostrarPregunta();
+}
+
+
+/* =========================================================
+   SIGUIENTE PREGUNTA
+========================================================= */
+
+function siguientePregunta() {
+
+    if (!respuestas[preguntaActual]) {
+
+        alert(
+            "Por favor, selecciona una respuesta."
+        );
+
+        return;
+    }
+
+
+    if (
+        preguntaActual <
+        preguntas.length - 1
+    ) {
+
+        preguntaActual++;
+
+        mostrarPregunta();
+
+    } else {
+
+        calcularResultados();
+
+    }
+
+}
+
+
+/* =========================================================
+   PREGUNTA ANTERIOR
+========================================================= */
+
+function anteriorPregunta() {
+
+    if (preguntaActual > 0) {
+
+        preguntaActual--;
+
+        mostrarPregunta();
+
+    }
+
+}
+
+
+/* =========================================================
+   CALCULAR RESULTADOS
+========================================================= */
+
+function calcularResultados() {
+
+    const puntuaciones = {
+
+        tecnologia: 0,
+        arte: 0,
+        salud: 0,
+        ciencias: 0,
+        negocios: 0
+
+    };
+
+
+    respuestas.forEach(area => {
+
+        if (
+            puntuaciones[area] !== undefined
+        ) {
+
+            puntuaciones[area]++;
+
+        }
+
+    });
+
+
+    const ordenadas =
+        Object.entries(puntuaciones)
+        .sort(
+            (a, b) => b[1] - a[1]
+        );
+
+
+    const principal =
+        ordenadas[0][0];
+
+
+    const puntosPrincipal =
+        ordenadas[0][1];
+
+
+    const porcentajePrincipal =
+        Math.round(
+            (puntosPrincipal /
+            preguntas.length) * 100
+        );
+
+
+    document.getElementById(
+        "test"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "resultados"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "tituloResultado"
+    ).textContent =
+        `¡Buen trabajo, ${nombreUsuario}!`;
+
+
+    document.getElementById(
+        "mensajeResultado"
+    ).textContent =
+        "Según tus respuestas, esta es tu orientación vocacional inicial.";
+
+
+    document.getElementById(
+        "areaPrincipal"
+    ).textContent =
+        areas[principal].nombre;
+
+
+    document.getElementById(
+        "porcentajePrincipal"
+    ).textContent =
+        porcentajePrincipal + "%";
+
+
+    /* =========================
+       BARRAS
+    ========================= */
+
+    const barras =
+        document.getElementById(
+            "barrasResultados"
+        );
+
+    barras.innerHTML = "";
+
+
+    ordenadas.forEach(
+        ([clave, puntos]) => {
+
+            const porcentaje =
+                Math.round(
+                    (puntos /
+                    preguntas.length) * 100
+                );
+
+
+            barras.innerHTML += `
+
+                <div class="resultado-area">
+
+                    <div class="area-nombre">
+
+                        <span>
+                            ${areas[clave].nombre}
+                        </span>
+
+                        <span>
+                            ${porcentaje}%
+                        </span>
+
+                    </div>
+
+                    <div class="barra-resultado">
+
+                        <div
+                            style="width:${porcentaje}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    /* =========================
+       CARRERAS
+    ========================= */
+
+    const listaCarreras =
+        document.getElementById(
+            "listaCarreras"
+        );
+
+    listaCarreras.innerHTML = "";
+
+
+    areas[principal].carreras.forEach(
+        carrera => {
+
+            listaCarreras.innerHTML += `
+
+                <div class="carrera">
+                    🎓 ${carrera}
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    /* =========================
+       CONSEJO
+    ========================= */
+
+    document.getElementById(
+        "consejoTexto"
+    ).textContent =
+        areas[principal].consejo;
+
+}
+
+
+/* =========================================================
+   REINICIAR
+========================================================= */
+
+function reiniciarTest() {
+
+    preguntaActual = 0;
+
+    respuestas = [];
+
+
+    document.getElementById(
+        "resultados"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "inicio"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "nombre"
+    ).value =
+        nombreUsuario;
+
+}
+
+</script>
+
+</body>
+</html>
+```
